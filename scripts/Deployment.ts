@@ -1,7 +1,5 @@
 import { ethers } from 'hardhat';
 
-const PROPOSALS = ["Proposal 1", "Proposal 2", "Proposal 3"]
-
 function convertStringArrayToBytes32(array: string[]) {
   const bytes32Array = [];
   for (let index = 0; index < array.length; index++) {
@@ -11,14 +9,21 @@ function convertStringArrayToBytes32(array: string[]) {
 }
 
 async function main () {
+  const args = process.argv;
+  const proposals = args.slice(2);
+  if (proposals.length <= 0) throw new Error("Missing parameters: proposals");
+
+  const provider = ethers.provider;
+
+  return;
   console.log("Deploying Ballot contract!");
   console.log("Proposals: ");
-  PROPOSALS.forEach((element, index) => {
+  proposals.forEach((element, index) => {
     console.log(`Proposal N. ${index + 1}: ${element}`);
   });
   const ballotContractFactory = await ethers.getContractFactory("Ballot");
   const ballotContract = await ballotContractFactory.deploy(
-      convertStringArrayToBytes32(PROPOSALS)
+      convertStringArrayToBytes32(proposals)
   );
   console.log("Deploying contract ...");
   await ballotContract.deployTransaction.wait();
